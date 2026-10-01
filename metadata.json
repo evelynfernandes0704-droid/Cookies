@@ -1,0 +1,6 @@
+{
+  "name": "Atelier Crumb — Confeitaria Técnica & Gestão de Cookies",
+  "description": "Plataforma de e-commerce e gestão para confeitaria artesanal de cookies com 4 categorias, fichas técnicas, controle de estoque em tempo real, relatórios mensais do lojista e assistente de atendimento inteligente integrado à API Groq.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
