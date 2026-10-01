@@ -9,6 +9,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { CookieProduct } from '../data/cookiesData';
+import { generateLocalInventoryReply } from '../utils/inventoryAgent';
 
 export interface ChatMessage {
   id: string;
@@ -124,12 +125,14 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       });
 
       const data = await response.json();
+      const resolvedReply =
+        data.reply ||
+        generateLocalInventoryReply(query, products, stockPreset);
+
       const assistantMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content:
-          data.reply ||
-          'Consultei nosso catálogo, mas não consegui formatar a resposta. Pode reformular sua dúvida?',
+        content: resolvedReply,
         timestamp: new Date().toLocaleTimeString('pt-BR', {
           hour: '2-digit',
           minute: '2-digit',
@@ -143,10 +146,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       const fallbackMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content:
-          totalStoreStock === 0
-            ? 'Consultei o estoque local: atenção, **nosso estoque encontra-se ZERADO (0 unidades)** em todas as categorias no momento. Ative o botão **"Estoque Preenchido"** para liberar a pronta entrega!'
-            : `Consultei nosso estoque local: temos **${totalStoreStock} unidades disponíveis** distribuídas nas 4 categorias (Clássicos, Recheados, Gourmet e Veganos).`,
+        content: generateLocalInventoryReply(query, products, stockPreset),
         timestamp: nowTime,
         stockSnapshotCount: totalStoreStock,
       };
